@@ -8,8 +8,8 @@ Follow these steps to run the project locally:
 
 ### 1. Clone & Install
 ```bash
-git clone [https://github.com/siyaga/produk-test.git]
-cd knitto-backend-test
+git clone https://github.com/siyaga/produk-test.git
+cd backend-test
 npm install
 ```
 
