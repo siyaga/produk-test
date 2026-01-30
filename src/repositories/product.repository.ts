@@ -57,21 +57,28 @@ export const getProductId = async (id: string):Promise<Product | null> => {
 
 
 
-export const getAllProduct = async (limit: number, offset: number, search: string): Promise<Product[]> => {
+export const getAllProduct = async (limit: number, offset: number, search: string, minPrice: number, maxPrice: number): Promise<Product[]> => {
     const query = `
         SELECT id, name, description, price, stock, created_at, updated_at 
         FROM products 
         WHERE deleted_at IS NULL 
-        AND name ILIKE $3 -- ILIKE untuk case-insensitive
+        AND name ILIKE $3 
+        AND price >= $4
+        AND price <= $5
         ORDER BY created_at DESC 
         LIMIT $1 OFFSET $2
     `;
-    const result = await pool.query(query, [limit, offset, `%${search}%`]);
+    const result = await pool.query(query, [limit, offset, `%${search}%`, minPrice, maxPrice]);
     return result.rows;
 };
 
-export const countAllProduct = async (search: string): Promise<number> => {
-    const query = `SELECT COUNT(*) FROM products WHERE deleted_at IS NULL AND name ILIKE $1`;
-    const result = await pool.query(query, [`%${search}%`]);
+export const countAllProduct = async (search: string, minPrice: number, maxPrice: number): Promise<number> => {
+    const query = `SELECT COUNT(*) FROM products
+        WHERE deleted_at IS NULL
+        AND name ILIKE $1
+        AND price >= $2
+        AND price <= $3
+        `;
+    const result = await pool.query(query, [`%${search}%`, minPrice, maxPrice]);
     return parseInt(result.rows[0].count);
 };

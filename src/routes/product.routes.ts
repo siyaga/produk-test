@@ -30,6 +30,16 @@ const router = Router();
  *         schema: 
  *           type: string
  *         description: Search products by name
+ *       - in: query
+ *         name: min_price
+ *         schema: 
+ *           { type: integer, default: 0 }
+ *         description: Minimum price filter
+ *       - in: query
+ *         name: max_price
+ *         schema: 
+ *           { type: integer, default: 100000 }
+ *         description: Maximum price filter
  *     security:
  *       - bearerAuth: []
  *       - {}

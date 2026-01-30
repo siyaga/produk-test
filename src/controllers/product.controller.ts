@@ -122,11 +122,13 @@ export const listProducts = async (req: Request, res: Response) => {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
         const search = (req.query.search as string) || '';
+        const minPrice = parseInt(req.query.min_price as string) || 0;
+        const maxPrice = parseInt(req.query.max_price as string) || 999999999; 
         const offset = (page - 1) * limit;
 
         const [products, totalData] = await Promise.all([
-            productRepo.getAllProduct(limit, offset, search),
-            productRepo.countAllProduct(search)
+            productRepo.getAllProduct(limit, offset, search, minPrice, maxPrice),
+            productRepo.countAllProduct(search, minPrice, maxPrice)
         ]);
 
         const formattedProducts = products.map(product => ({
