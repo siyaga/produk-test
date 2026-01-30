@@ -28,19 +28,33 @@ export const login = async (req: Request, res: Response) => {
         const user = await userRepo.getUserByEmail(email);
 
         if (!user || user.deleted_at || !(await bcrypt.compare(password, user.password))) {
-            return sendError(res, 'Invalid credentials', 401);
+            return sendError(res, 'Invalid email or password', 401);
         }
-        const expires = '1h';
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: expires });
-        const {password: _, ...userWithoutPassword } = user;
+        const accessTokenExpire = '1h';
+        const refreshTokenExpire = '7d';
+        const secret = process.env.JWT_SECRET || 'secret';
+        const accessToken = jwt.sign(
+            { id: user.id, email: user.email }, 
+            secret, 
+            { expiresIn: accessTokenExpire }
+        );
+
+        const refreshToken = jwt.sign(
+            { id: user.id }, 
+            secret, 
+            { expiresIn: refreshTokenExpire }
+        );
 
         const responseData = {
-            token,
-            expires,
+           tokens: {
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                type: 'Bearer',
+                expires_in: accessTokenExpire 
+            },
             user: {
                 id: user.id,
                 email: user.email,
-                provider: user.provider,
                 created_at: formatDate(user.created_at), // "2026-01-29 14:25:32"
                 updated_at: formatDate(user.updated_at)  // "2026-01-29 14:25:32"
             }

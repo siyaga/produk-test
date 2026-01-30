@@ -4,7 +4,7 @@ export interface Product {
   description: Text; 
   price: number;
   stock: number;
-  created_by: string | null;
+  created_by: string;
   updated_by: string | null;
   created_at: Date | string | null;
   updated_at: Date | string | null;

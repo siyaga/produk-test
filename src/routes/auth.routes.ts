@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @openapi
- * /auth/register:
+ * /api/v1/auth/register:
  *   post:
  *     tags: [Auth]
  *     summary: Register
@@ -30,7 +30,7 @@ router.post('/register', authCtrl.register);
 
 /**
  * @openapi
- * /auth/login:
+ * /api/v1/auth/login:
  *   post:
  *     tags: [Auth]
  *     summary: Login
@@ -47,13 +47,28 @@ router.post('/register', authCtrl.register);
  *                 type: string
  *     responses:
  *       200:
- *         description: OK
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     tokens:
+ *                       type: object
+ *                       properties:
+ *                         access_token:
+ *                           type: string
  */
 router.post('/login', authCtrl.login);
 
 /**
  * @openapi
- * /auth/users:
+ * /api/v1/auth/users:
  *   get:
  *     tags: [Auth]
  *     summary: Users
@@ -66,6 +81,8 @@ router.post('/login', authCtrl.login);
  *         name: limit
  *         schema:
  *           type: integer
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: OK
