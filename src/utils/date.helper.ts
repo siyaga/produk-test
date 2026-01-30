@@ -2,6 +2,8 @@
  * Formats a date object into a professional string
  * Format: YYYY-MM-DD HH:mm:ss
  */
+
+
 export const formatDate = (date: Date | string | null | undefined): string | null => {
     if (!date) return null; 
     
@@ -18,4 +20,11 @@ export const formatDate = (date: Date | string | null | undefined): string | nul
     const seconds = String(d.getSeconds()).padStart(2, '0');
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+export const formatDateSystemReport = (date: Date | string) => {
+    return new Date(date).toLocaleString('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    });
 };

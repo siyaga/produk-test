@@ -5,7 +5,6 @@ const initDatabase = async () => {
   try {
     console.log('--- Starting Database Initialization ---');
 
-    // 1. Create Users Table
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -18,7 +17,6 @@ const initDatabase = async () => {
       );
     `);
 
-    // 2. Create Products Table
     await client.query(`
       CREATE TABLE IF NOT EXISTS products (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -34,22 +32,26 @@ const initDatabase = async () => {
       );
     `);
 
-    // 3. Create Orders Table
     await client.query(`
       CREATE TABLE IF NOT EXISTS orders (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        product_id UUID NOT NULL REFERENCES products(id),
+        product_id UUID NOT NULL ,
         invoice_code VARCHAR(100) UNIQUE NOT NULL,
         quantity INTEGER NOT NULL,
         total_price DECIMAL(12, 2) NOT NULL,
+        city VARCHAR(100) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         deleted_at TIMESTAMP
       );
     `);
 
-    // 4. Create Indexes
+    await client.query(`
+      ALTER TABLE orders 
+      ADD COLUMN IF NOT EXISTS city VARCHAR(100);
+    `);
+
     await client.query(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_orders_invoice ON orders(invoice_code);`);
 

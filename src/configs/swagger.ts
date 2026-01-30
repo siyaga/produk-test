@@ -23,6 +23,7 @@ const options: swaggerJSDoc.Options = {
   apis: [
     path.join(__dirname, '../routes/auth.routes.ts'),
     path.join(__dirname, '../routes/product.routes.ts'),
+    path.join(__dirname, '../routes/order.routes.ts'),
   ],
 };
 

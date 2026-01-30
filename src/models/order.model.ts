@@ -5,6 +5,7 @@ export interface Order {
   invoice_code: string;
   quantity: number;
   total_price: number;
+  city: string;
   created_by: string | null;
   updated_by: string | null;
   created_at: Date | string | null;
@@ -12,4 +13,3 @@ export interface Order {
   deleted_at?: Date | string | null; 
   
 }
-
