@@ -41,7 +41,6 @@ export const getAllUsers = async (limit: number, offset: number): Promise<User[]
     return result.rows;
 };
 
-// Fungsi 2: Hitung total user (untuk keperluan pagination di response)
 export const countAllUsers = async (): Promise<number> => {
     const query = `SELECT COUNT(*) FROM users WHERE deleted_at IS NULL`;
     const result = await pool.query(query);
